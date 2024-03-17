@@ -39,6 +39,8 @@ dependencies:
   google_fonts: ^6.2.0
   bip39: ^1.0.6
   web3dart: ^2.7.3
+  bip32: ^2.0.0
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:

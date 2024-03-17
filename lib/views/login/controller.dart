@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wallet_app/services/storage_service.dart';
 import 'package:wallet_app/services/wallet_provider.dart';
+import 'package:wallet_app/views/confirm_seed/controller.dart';
 
 class LoginController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -8,7 +10,9 @@ class LoginController extends GetxController
   TextEditingController passwordController = TextEditingController();
   RxInt currentIndex = 0.obs;
 
-  RxList<String>? phrase;
+  RxList<String>? phrase = RxList();
+
+  RxBool isVisible = false.obs;
   RxList<Map<String, dynamic>> steps = [
     {
       "index": 0,
@@ -32,7 +36,15 @@ class LoginController extends GetxController
   @override
   void onInit() {
     pageViewController = PageController();
-    createNewWallet();
+
+    if (Get.find<StorageService>().getMnemonic == null) {
+      _createNewWallet();
+    } else {
+      // 0x599d394395b92b1037e7d8b655de0917c284cdf8
+      phrase?.clear();
+
+      phrase?.value = Get.find<StorageService>().getMnemonic!.split(" ");
+    }
     super.onInit();
   }
 
@@ -64,6 +76,14 @@ class LoginController extends GetxController
     currentIndex.value = index;
     steps[index - 1]["isDone"] = true;
 
+    if (index == 2) {
+      final confirmCont = Get.put(ConfirmSeedController());
+
+      confirmCont.initLists(phrase!.toList());
+    } else if (index == 3) {
+      Get.find<StorageService>().onSaveMnemonic(phrase.toString());
+    }
+
     pageViewController.animateToPage(
       index,
       duration: const Duration(milliseconds: 400),
@@ -71,11 +91,13 @@ class LoginController extends GetxController
     );
   }
 
-  Future<void> createNewWallet() async {
+  Future<void> _createNewWallet() async {
     final nomanic = await WalletService().generateMnemonic();
 
     final key = await WalletService().createCredentials(nomanic);
 
     phrase?.value = nomanic.split(" ");
+
+    // await creamultiple(nomanic);
   }
 }

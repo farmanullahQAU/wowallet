@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:wallet_app/views/confirm_seed/view.dart';
+import 'package:wallet_app/views/congrat/view.dart';
 
 import 'controller.dart';
 
@@ -15,7 +18,12 @@ class PageViewExampleState extends StatelessWidget {
           children: [
             PageView(
               controller: loginController.pageViewController,
-              children: <Widget>[LoginPage(), RecoveryPhraseView()],
+              children: <Widget>[
+                LoginPage(),
+                RecoveryPhraseView(),
+                ConfirmSeedPage(),
+                CongratView()
+              ],
             ),
             Column(
               children: [
@@ -186,50 +194,103 @@ class RecoveryPhraseView extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           Obx(
-            () => loginController.phrase != null
-                ? Container(
-                    margin: const EdgeInsets.only(top: 16),
-                    padding: const EdgeInsets.all(16),
-                    width: context.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(),
-                    ),
-                    child: GridView(
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                childAspectRatio: 2, crossAxisCount: 3),
-                        children: loginController.phrase!
-                            .map((element) => Chip(label: Text(element)))
-                            .toList()))
-                : Container(
-                    margin: const EdgeInsets.only(top: 16),
-                    padding: const EdgeInsets.all(16),
-                    width: context.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.visibility)),
-                        const Text("Make sure no body is looking")
-                      ],
-                    ),
-                  ),
+            () => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (loginController.phrase != null)
+                  Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      padding: const EdgeInsets.all(16),
+                      width: context.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(),
+                      ),
+                      child: GridView(
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  childAspectRatio: 3,
+                                  crossAxisCount: 3,
+                                  mainAxisSpacing: 6),
+                          children: loginController.phrase!
+                              .map((element) => Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Container(
+                                      width: context.width * 0.2,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 8),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          border: Border.all(
+                                              color: context
+                                                  .theme.colorScheme.outline)),
+                                      child: loginController.isVisible.isFalse
+                                          ? const Center(child: Text("***"))
+                                          : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    "${loginController.phrase!.indexOf(element) + 1}",
+                                                    style: context
+                                                        .textTheme.labelMedium
+                                                        ?.copyWith(
+                                                            color: context
+                                                                .theme
+                                                                .colorScheme
+                                                                .primary)),
+                                                const SizedBox(
+                                                  width: 4,
+                                                ),
+                                                Flexible(
+                                                    fit: FlexFit.tight,
+                                                    child: Text(element)),
+                                              ],
+                                            ),
+                                    ),
+                                  ))
+                              .toList())),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  children: [
+                    TextButton.icon(
+                        onPressed: () {
+                          loginController.isVisible.toggle();
+                        },
+                        icon: loginController.isVisible.isTrue
+                            ? const Icon(Icons.visibility_off)
+                            : const Icon(Icons.visibility),
+                        label: loginController.isVisible.isTrue
+                            ? const Text("Hide seed phrase")
+                            : const Text("Show seed phrase")),
+                    TextButton.icon(
+                        onPressed: () {
+//
+                          Clipboard.setData(ClipboardData(
+                              text: loginController.phrase!.join(" ")));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Copied to clipboard")));
+                        },
+                        icon: const Icon(Icons.copy),
+                        label: const Text("Copy to clipboard"))
+                  ],
+                )
+              ],
+            ),
           ),
           const SizedBox(height: 20),
           SizedBox(
             width: context.width * 0.7,
             height: 40,
             child: FilledButton(
-              onPressed: () => loginController.createNewWallet(),
-              child: const Text('Generate Phrase'),
+              onPressed: () => loginController.toNextStep(2),
+              child: const Text('Next'),
             ),
           ),
         ],

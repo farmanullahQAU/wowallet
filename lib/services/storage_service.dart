@@ -4,15 +4,13 @@ import 'package:wallet_app/style/constants.dart';
 
 class StorageService extends GetxService {
   final box = GetStorage();
-  Future _saveMnemonic(String mnemonic) async {
-    box.write(mnomenicKey, mnemonic);
+  Future _saveMnemonic(List<String>? mnemonic) async {
+    box.write(mnomenicKey, mnemonic?.join(" "));
   }
 
   String? get getMnemonic => box.read(mnomenicKey);
 
-  void onSaveMnemonic(String mnemonic) async {
+  Future onSaveMnemonic(List<String>? mnemonic) async {
     await _saveMnemonic(mnemonic);
-
-    print("saved");
   }
 }

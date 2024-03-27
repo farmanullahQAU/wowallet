@@ -6,100 +6,104 @@ import 'package:wallet_app/views/congrat/view.dart';
 
 import 'controller.dart';
 
-class PageViewExampleState extends StatelessWidget {
+class MnomenicPhraseView extends StatelessWidget {
   final loginController = Get.put(LoginController());
-  PageViewExampleState({super.key});
+  MnomenicPhraseView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GetBuilder<LoginController>(builder: (_) {
-        return Stack(
-          children: [
-            PageView(
-              controller: loginController.pageViewController,
-              children: <Widget>[
-                LoginPage(),
-                RecoveryPhraseView(),
-                ConfirmSeedPage(),
-                CongratView()
-              ],
-            ),
-            Column(
-              children: [
-                Text(
-                  "WOWALLET",
-                  style: context.theme.textTheme.bodyLarge,
-                ),
-                const SizedBox(
-                  height: 32,
-                ),
-                Obx(() => Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: loginController.steps.map((element) {
-                        final index = loginController.steps.indexOf(element);
-                        var boxDecoration = BoxDecoration(
-                            color: loginController.steps[index]["isDone"]
-                                ? context.theme.colorScheme.primary
-                                : null,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                                color: loginController.currentIndex.value ==
-                                            index ||
-                                        loginController.steps[index]
-                                                ["isDone"] ==
-                                            true
-                                    ? context.theme.colorScheme.primary
-                                    : context.theme.primaryColorLight));
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 25,
-                              width: 25,
-                              decoration: boxDecoration,
-                              child: Center(
-                                  child: Text(
-                                element["index"].toString(),
-                                style: context.textTheme.bodySmall,
-                              )),
-                            ),
-                            if (index < 2)
-                              Container(
-                                  width: context.width * 0.2,
-                                  height: 2,
-                                  color: element["isDone"] == true
-                                      ? context.theme.colorScheme.primary
-                                      : context.theme.primaryColorLight)
-                          ],
-                        );
-                      }).toList(),
-                    )),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    // mainAxisSize: MainAxisSize.min,
-                    children: loginController.steps
-                        .map((element) => Flexible(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 16),
-                                child: Text(
-                                  element["title"],
-                                  style: context.textTheme.labelSmall,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ))
-                        .toList(),
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: GetBuilder<LoginController>(builder: (_) {
+          return Stack(
+            children: [
+              PageView(
+                controller: loginController.pageViewController,
+                children: <Widget>[
+                  LoginPage(),
+                  RecoveryPhraseView(),
+                  ConfirmSeedPage(),
+                  CongratView()
+                ],
+              ),
+              Column(
+                children: [
+                  SizedBox(height: 16,),
+                  Text(
+                    "WOWALLET",
+                    style: context.theme.textTheme.bodyLarge,
                   ),
-                ),
-              ],
-            ),
-          ],
-        );
-      }),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  Obx(() => Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: loginController.steps.map((element) {
+                          final index = loginController.steps.indexOf(element);
+                          var boxDecoration = BoxDecoration(
+                              color: loginController.steps[index]["isDone"]
+                                  ? context.theme.colorScheme.primary
+                                  : null,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                  color: loginController.currentIndex.value ==
+                                              index ||
+                                          loginController.steps[index]
+                                                  ["isDone"] ==
+                                              true
+                                      ? context.theme.colorScheme.primary
+                                      : context.theme.primaryColorLight));
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 25,
+                                width: 25,
+                                decoration: boxDecoration,
+                                child: Center(
+                                    child: Text(
+                                  element["index"].toString(),
+                                  style: context.textTheme.bodySmall,
+                                )),
+                              ),
+                              if (index < 2)
+                                Container(
+                                    width: context.width * 0.2,
+                                    height: 2,
+                                    color: element["isDone"] == true
+                                        ? context.theme.colorScheme.primary
+                                        : context.theme.primaryColorLight)
+                            ],
+                          );
+                        }).toList(),
+                      )),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      // mainAxisSize: MainAxisSize.min,
+                      children: loginController.steps
+                          .map((element) => Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 16),
+                                  child: Text(
+                                    element["title"],
+                                    style: context.textTheme.labelSmall,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        }),
+      ),
     );
   }
 }
@@ -149,7 +153,7 @@ class LoginPage extends StatelessWidget {
                 )),
             const SizedBox(height: 20),
             SizedBox(
-              width: context.width * 0.7,
+              width: context.width,
               height: 40,
               child: FilledButton(
                 onPressed: loginController.login,
@@ -174,7 +178,7 @@ class RecoveryPhraseView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -199,55 +203,69 @@ class RecoveryPhraseView extends StatelessWidget {
               children: [
                 if (loginController.phrase != null)
                   Container(
-                      margin: const EdgeInsets.only(top: 16),
-                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.symmetric(horizontal: 8,vertical: 16),
+                      padding: const EdgeInsets.all(0),
                       width: context.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(),
-                      ),
+                      // decoration: BoxDecoration(
+                      //   borderRadius: BorderRadius.circular(16),
+                      //   border: Border.all(),
+                      // ),
                       child: GridView(
+                        padding: EdgeInsets.zero,
                           shrinkWrap: true,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                   childAspectRatio: 3,
                                   crossAxisCount: 3,
-                                  mainAxisSpacing: 6),
+                                  crossAxisSpacing: 8,
+                                  mainAxisSpacing: 8),
                           children: loginController.phrase!
                               .map((element) => Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 8),
+                                    //
+                                    // margin: const EdgeInsets.symmetric(
+                                    //     horizontal: 8),
                                     child: Container(
                                       width: context.width * 0.2,
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 16, vertical: 8),
+                                          horizontal: 2, vertical: 0),
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(16),
                                           border: Border.all(
                                               color: context
-                                                  .theme.colorScheme.outline)),
+                                                  .theme.colorScheme.outline)
+
+                                      ),
                                       child: loginController.isVisible.isFalse
                                           ? const Center(child: Text("***"))
                                           : Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                                  MainAxisAlignment.center,
                                               children: [
-                                                Text(
-                                                    "${loginController.phrase!.indexOf(element) + 1}",
-                                                    style: context
-                                                        .textTheme.labelMedium
-                                                        ?.copyWith(
-                                                            color: context
-                                                                .theme
-                                                                .colorScheme
-                                                                .primary)),
-                                                const SizedBox(
-                                                  width: 4,
-                                                ),
                                                 Flexible(
-                                                    fit: FlexFit.tight,
-                                                    child: Text(element)),
+                                                  flex: 1,
+                                                  fit: FlexFit.tight,
+                                                  child: Align(
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                        "${loginController.phrase!.indexOf(element) + 1}",
+                                                        style: context
+                                                            .textTheme.labelMedium
+                                                            ?.copyWith(
+                                                                color: context
+                                                                    .theme
+                                                                    .colorScheme
+                                                                    .primary)),
+                                                  ),
+                                                ),
+
+                                                Flexible(
+                                                  flex: 2,
+                                                    // fit: FlexFit.tight,
+                                                    child: Align(
+
+                                                        alignment: Alignment.centerLeft,
+                                                        child: Text(element,style: context.textTheme.bodySmall,))),
                                               ],
                                             ),
                                     ),

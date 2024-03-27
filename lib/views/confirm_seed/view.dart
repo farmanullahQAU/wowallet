@@ -10,11 +10,11 @@ class ConfirmSeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Obx(
           () => Container(
-              margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
+              margin: const EdgeInsets.only(top: 16, left: 8, right: 8),
               padding: const EdgeInsets.all(16),
               width: context.width,
               decoration: BoxDecoration(
@@ -24,11 +24,11 @@ class ConfirmSeedPage extends StatelessWidget {
                     : Border.all(),
               ),
               child: GridView(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding:  EdgeInsets.zero,
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       childAspectRatio: 3,
-                      crossAxisSpacing: 16,
+                      crossAxisSpacing: 8,
                       crossAxisCount: 3,
                       mainAxisSpacing: 8),
                   children: List.generate(
@@ -75,11 +75,10 @@ class ConfirmSeedPage extends StatelessWidget {
           final rows = (controller.shufflePhrase.length / itemsPerRow).ceil();
 
           return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: BoxDecoration(
-                border: Border.all(), borderRadius: BorderRadius.circular(16)),
+            margin: const EdgeInsets.only(top: 16, left: 8, right: 8),
+
             child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding:  EdgeInsets.symmetric(horizontal: 8),
                 shrinkWrap: true,
                 itemCount: rows,
                 itemBuilder: (context, index) {
@@ -91,7 +90,9 @@ class ConfirmSeedPage extends StatelessWidget {
                   final list =
                       controller.shufflePhrase.sublist(startIndex, endIndex);
                   return Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+
+
+
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: list
@@ -101,9 +102,9 @@ class ConfirmSeedPage extends StatelessWidget {
                                   e,
                                 ),
                                 child: Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  width: context.width * 0.2,
+                                  margin: EdgeInsets.symmetric(horizontal: 4,vertical: 4)
+,
+                                  width: context.width * 0.3-10,
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 8),
                                   decoration: BoxDecoration(
@@ -127,6 +128,8 @@ class ConfirmSeedPage extends StatelessWidget {
                 }),
           );
         }),
+
+        SizedBox(height: 16,),
         SizedBox(
           width: context.width * 0.7,
           height: 40,

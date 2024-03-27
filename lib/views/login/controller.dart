@@ -72,7 +72,7 @@ class LoginController extends GetxController
     toNextStep(1);
   }
 
-  void toNextStep(int index) {
+  void toNextStep(int index) async {
     currentIndex.value = index;
     steps[index - 1]["isDone"] = true;
 
@@ -81,7 +81,7 @@ class LoginController extends GetxController
 
       confirmCont.initLists(phrase!.toList());
     } else if (index == 3) {
-      Get.find<StorageService>().onSaveMnemonic(phrase.toString());
+      await Get.find<StorageService>().onSaveMnemonic(phrase?.toList());
     }
 
     pageViewController.animateToPage(
@@ -94,7 +94,7 @@ class LoginController extends GetxController
   Future<void> _createNewWallet() async {
     final nomanic = await WalletService().generateMnemonic();
 
-    final key = await WalletService().createCredentials(nomanic);
+    final key = await WalletService().createCredentials(nomanic, 0);
 
     phrase?.value = nomanic.split(" ");
 

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wallet_app/services/storage_service.dart';
 import 'package:wallet_app/services/wallet_provider.dart';
 import 'package:wallet_app/services/web3services.dart';
 import 'package:wallet_app/views/login/view.dart';
 import 'package:web3dart/web3dart.dart';
 
 class HomeController extends GetxController {
+  RxBool isShow = false.obs;
   int currentPageIndex = 0;
+  int accountIndex = 0;
+
+  String? currentAccount;
+
   List<Widget> views = [MnomenicPhraseView(), const Text("sss")];
 
   void changePageIndex(int index) {
@@ -16,30 +22,19 @@ class HomeController extends GetxController {
   }
 
   final web3service = Get.put(Web3Services());
-  EthPrivateKey? privateKey;
-  EtherAmount? balance;
   @override
   void onInit() async {
-    await initKey();
-    balance = await accountBalance();
+    currentAccount = StorageService().addresses.first;
+    // await initKey();
     super.onInit();
   }
 
-  initKey() async {
-    // print(StorageService().getMnemonic!);
-    final aa = await WalletService().createCredentials(
-        "across boil reveal wild know sword pigeon express nerve wink smoke stem",
-        0);
-    // Map<String, String> jsonMap = {
-    //   'privateKey': WalletService().privateKeyHex(privateKey!)
-    // };
-    // final aaa = json.encode(jsonMap);
-    // final aa = WalletService().revealPrivateKey();
+  getBalance(String privateKey) {}
+  Future<EtherAmount> accountBalance(EthereumAddress address) async =>
+      await web3service.getAccountBalance(EthereumAddress.fromHex(address.hex));
 
-    // final key = WalletService().privateKeyHex(aa);
+  void addAccount() {
+    Get.find<WalletService>()
+        .createCredentials(StorageService().addresses.length);
   }
-
-  Future<EtherAmount> accountBalance() async =>
-      await web3service.getAccountBalance(EthereumAddress.fromHex(
-          "0x599d394395b92b1037e7d8b655de0917c284cdf8"));
 }

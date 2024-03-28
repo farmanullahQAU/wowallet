@@ -9,10 +9,16 @@ import 'views/login/view.dart';
 
 void main() async {
   await GetStorage.init();
-  Get.put(StorageService());
+  await initServices();
   Get.put(WalletService());
 
   runApp(const MyApp());
+}
+
+Future initServices() async {
+  final controller = Get.put(StorageService());
+
+  controller.init();
 }
 
 class MyApp extends StatelessWidget {

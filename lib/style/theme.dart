@@ -18,7 +18,7 @@ class AppTheme {
       titleSmall: GoogleFonts.openSans(color: Colors.white),
       bodySmall: GoogleFonts.openSans(color: Colors.white),
     ),
-    cardColor: const Color(0xFF232323),
+    // cardColor: const Color(0xFF232323),
   );
   ThemeData lightTheme = ThemeData.light().copyWith(
     brightness: Brightness.light,

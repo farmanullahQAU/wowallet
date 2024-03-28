@@ -80,8 +80,6 @@ class LoginController extends GetxController
       final confirmCont = Get.put(ConfirmSeedController());
 
       confirmCont.initLists(phrase!.toList());
-    } else if (index == 3) {
-      await Get.find<StorageService>().onSaveMnemonic(phrase?.toList());
     }
 
     pageViewController.animateToPage(
@@ -92,11 +90,8 @@ class LoginController extends GetxController
   }
 
   Future<void> _createNewWallet() async {
-    final nomanic = await WalletService().generateMnemonic();
-
-    final key = await WalletService().createCredentials(nomanic, 0);
-
-    phrase?.value = nomanic.split(" ");
+    await WalletService().createCredentials(0);
+    phrase?.value = StorageService().getMnemonic!.split(" ");
 
     // await creamultiple(nomanic);
   }

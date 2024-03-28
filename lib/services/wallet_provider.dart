@@ -2,23 +2,28 @@ import 'dart:math';
 
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip39;
+import 'package:wallet_app/services/storage_service.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 class WalletService {
-  Future<String> generateMnemonic() async {
+  generateMsnemonic() {
     return bip39.generateMnemonic();
   }
 
-  Future<String> createCredentials(String mnemonic, int index) async {
+  Future<void> createCredentials(int index) async {
+    String mnemonic = generateMsnemonic();
     final privateKey = await _createMultipleCredentials(mnemonic, index);
-    return privateKey;
+
+    if (StorageService().getMnemonic == null) {
+      await StorageService().onSaveMnemonic(mnemonic.split(" "));
+    }
+    StorageService().onSavePrivateKey(privateKey);
   }
 
   Future<String> _createMultipleCredentials(String mnemonic, int index) async {
     final seed = bip39.mnemonicToSeed(mnemonic);
     final hdWallet = bip32.BIP32.fromSeed(seed);
-    print(mnemonic);
 
     final childKey = hdWallet.derivePath("m/44'/60'/$index'/0/0");
     final privateKeyHex = childKey.privateKey;

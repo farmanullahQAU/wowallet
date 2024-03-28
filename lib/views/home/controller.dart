@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:wallet_app/services/storage_service.dart';
 import 'package:wallet_app/services/wallet_provider.dart';
 import 'package:wallet_app/services/web3services.dart';
+import 'package:wallet_app/style/theme.dart';
 import 'package:wallet_app/views/login/view.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -14,12 +15,6 @@ class HomeController extends GetxController {
   String? currentAccount;
 
   List<Widget> views = [MnomenicPhraseView(), const Text("sss")];
-
-  void changePageIndex(int index) {
-    currentPageIndex = index;
-
-    update(["bottomNavbar"]);
-  }
 
   final web3service = Get.put(Web3Services());
   @override
@@ -36,5 +31,9 @@ class HomeController extends GetxController {
   void addAccount() {
     Get.find<WalletService>()
         .createCredentials(StorageService().addresses.length);
+  }
+
+  changeTheme() {
+    Get.changeTheme(AppTheme().darkTheme);
   }
 }

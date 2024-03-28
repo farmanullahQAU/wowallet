@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wallet_app/services/storage_service.dart';
-import 'package:wallet_app/views/home/view.dart';
+import 'package:wallet_app/views/bottom_navbar/view.dart';
 
 class CongratView extends StatelessWidget {
   final controller = Get.put(StorageService());
@@ -33,7 +33,7 @@ class CongratView extends StatelessWidget {
           height: 40,
           child: FilledButton(
             onPressed: () {
-              Get.off(() => HomeView());
+              Get.off(() => BottomNavbarView());
             },
             child: const Text('Done'),
           ),

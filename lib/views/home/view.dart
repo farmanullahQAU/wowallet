@@ -19,6 +19,11 @@ class HomeView extends StatelessWidget {
             CustomScrollView(
               slivers: <Widget>[
                 SliverAppBar(
+                  actions: [
+                    IconButton(
+                        onPressed: controller.changeTheme,
+                        icon: const Icon(Icons.brightness_3_outlined))
+                  ],
                   title: TextButton.icon(
                     onPressed: controller.isShow.toggle,
                     label: Row(
@@ -263,31 +268,6 @@ class HomeView extends StatelessWidget {
                       ),
                     ),
             )
-          ],
-        ),
-        bottomNavigationBar: NavigationBar(
-          onDestinationSelected: controller.changePageIndex,
-          indicatorColor: context.theme.colorScheme.primary,
-          // backgroundColor: context.theme.colorScheme.background,
-          // labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-          selectedIndex: controller.currentPageIndex,
-          destinations: const <Widget>[
-            NavigationDestination(
-              selectedIcon: Icon(Icons.home),
-              icon: Icon(Icons.home_outlined),
-              label: 'Home',
-            ),
-            NavigationDestination(
-              icon: Badge(
-                label: Text('2'),
-                child: Icon(Icons.person),
-              ),
-              label: 'Profile',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.token),
-              label: 'Mint NFT',
-            ),
           ],
         ),
       ),
